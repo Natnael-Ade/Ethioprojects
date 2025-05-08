@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite to Fanta Transition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #00A86B 0%, #008040 100%);
+            transition: background 0.8s ease;
+        }
+        
+        .fanta-bg {
+            background: linear-gradient(135deg, #FF5F00 0%, #E35205 100%);
+        }
+        
+        .leaf {
+            position: absolute;
+            z-index: 30;
+            animation: float 8s infinite ease-in-out;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+        
+        .can-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 60vh;
+            transition: transform 0.8s ease;
+        }
+        
+        .can {
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+            transition: transform 0.8s ease;
+            width: 150px;
+            position: relative;
+            z-index: 20;
+        }
+        
+        .fanta-can {
+            width: 220px; /* Increased size for Fanta can */
+            z-index: 25; /* Higher z-index to cover the text */
+        }
+        
+        .lemon {
+            position: absolute;
+            z-index: 15;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.15));
+            transition: transform 0.8s ease, opacity 0.8s ease;
+        }
+        
+        .lemon-top {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%) rotate(15deg);
+            width: 60px;
+        }
+        
+        .lemon-bottom {
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            width: 70px;
+        }
+        
+        .brand-text {
+            position: absolute;
+            z-index: 5;
+            font-size: 12rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            letter-spacing: 4px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.8;
+            transition: opacity 0.8s ease;
+        }
+        
+        .click-area {
+            position: fixed;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            z-index: 100;
+            cursor: pointer;
+        }
+        
+        .right-area {
+            right: 0;
+        }
+        
+        .left-area {
+            left: 0;
+        }
+        
+        .slide-left {
+            transform: translateX(-100%);
+        }
+        
+        .slide-right {
+            transform: translateX(100%);
+        }
+        
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        
+        .rotate-leaves {
+            animation: rotateLeaves 0.8s ease forwards;
+        }
+        
+        @keyframes rotateLeaves {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .brand-text {
+                font-size: 6rem;
+                letter-spacing: 2px;
+            }
+            
+            .lemon {
+                width: 40px !important;
+            }
+            
+            .can {
+                width: 120px;
+            }
+            
+            .fanta-can {
+                width: 180px; /* Adjusted for mobile */
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <!-- Floating leaves in foreground -->
+    <img src="https://i.postimg.cc/5tGjkP0B/image-fx-1-removebg-preview.png" class="leaf" style="top: 10%; left: 5%; width: 50px; transform: rotate(15deg); animation-delay: 0s;" alt="Leaf">
+    <img src="https://i.postimg.cc/5tGjkP0B/image-fx-1-removebg-preview.png" class="leaf" style="top: 25%; right: 8%; width: 40px; transform: rotate(-25deg); animation-delay: 1s;" alt="Leaf">
+    <img src="https://i.postimg.cc/5tGjkP0B/image-fx-1-removebg-preview.png" class="leaf" style="bottom: 15%; left: 10%; width: 45px; transform: rotate(45deg); animation-delay: 2s;" alt="Leaf">
+    <img src="https://i.postimg.cc/5tGjkP0B/image-fx-1-removebg-preview.png" class="leaf" style="bottom: 30%; right: 5%; width: 55px; transform: rotate(-10deg); animation-delay: 3s;" alt="Leaf">
+    <img src="https://i.postimg.cc/5tGjkP0B/image-fx-1-removebg-preview.png" class="leaf" style="top: 15%; right: 15%; width: 35px; transform: rotate(30deg); animation-delay: 0.5s;" alt="Leaf">
+    <img src="https://i.postimg.cc/5tGjkP0B/image-fx-1-removebg-preview.png" class="leaf" style="bottom: 20%; right: 20%; width: 50px; transform: rotate(-20deg); animation-delay: 1.5s;" alt="Leaf">
+    
+    <!-- Navigation -->
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="text-xl font-bold">LEMONADE</div>
+        <div class="hidden md:flex space-x-8">
+            <a href="#" class="hover:underline">About</a>
+            <a href="#" class="hover:underline">Products</a>
+            <a href="#" class="hover:underline">News</a>
+            <a href="#" class="hover:underline">Contact</a>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 relative pb-16">
+        <!-- Large "SPRITE" text behind can -->
+        <div class="brand-text" id="brandText">
+            SPRITE
+        </div>
+        
+        <div class="can-container" id="canContainer">
+            <!-- Main can image -->
+            <img src="https://i.postimg.cc/XY42pLnk/image-fx-4-removebg-preview.png" class="can" id="mainCan" alt="Lemonade Can">
+            
+            <!-- Lemons positioned naturally -->
+            <img src="https://i.postimg.cc/fyScrtDL/image-fx-2-removebg-preview.png" class="lemon lemon-top" alt="Lemon">
+            <img src="https://i.postimg.cc/fyScrtDL/image-fx-2-removebg-preview.png" class="lemon lemon-bottom" alt="Lemon">
+        </div>
+    </main>
+    
+    <!-- Hidden Fanta elements -->
+    <div id="fantaElements" style="display: none;">
+        <img src="https://i.postimg.cc/VkNb500V/image-fx-5-removebg-preview.png" class="can fanta-can" alt="Fanta Can">
+    </div>
+    
+    <!-- Click areas for transition -->
+    <div class="click-area right-area" id="rightClickArea"></div>
+    <div class="click-area left-area" id="leftClickArea" style="display: none;"></div>
+    
+    <script>
+        // Disable refreshing
+        window.addEventListener('keydown', function(e) {
+            if(e.keyCode == 116) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Transition elements
+        const rightClickArea = document.getElementById('rightClickArea');
+        const leftClickArea = document.getElementById('leftClickArea');
+        const canContainer = document.getElementById('canContainer');
+        const mainCan = document.getElementById('mainCan');
+        const brandText = document.getElementById('brandText');
+        const fantaElements = document.getElementById('fantaElements');
+        const leaves = document.querySelectorAll('.leaf');
+        const body = document.body;
+        const lemons = document.querySelectorAll('.lemon');
+        
+        let isFanta = false;
+        let isEnhancedFanta = false;
+        
+        // Transition to Fanta
+        rightClickArea.addEventListener('click', function() {
+            if (isFanta) return;
+            
+            isFanta = true;
+            
+            // Add rotate animation to leaves
+            leaves.forEach(leaf => {
+                leaf.classList.add('rotate-leaves');
+            });
+            
+            // Slide can container to the left
+            canContainer.classList.add('slide-left');
+            
+            // Fade out brand text
+            brandText.classList.add('fade-out');
+            
+            // Change background to orange
+            body.classList.add('fanta-bg');
+            
+            // After animation completes
+            setTimeout(() => {
+                // Change brand text to Fanta
+                brandText.textContent = 'FANTA';
+                
+                // Change can to Fanta and make it larger
+                mainCan.src = 'https://i.postimg.cc/VkNb500V/image-fx-5-removebg-preview.png';
+                mainCan.classList.add('fanta-can');
+                
+                // Hide lemons
+                lemons.forEach(lemon => {
+                    lemon.style.opacity = '0';
+                });
+                
+                // Reset animations
+                canContainer.classList.remove('slide-left');
+                brandText.classList.remove('fade-out');
+                
+                // Remove leaf rotation
+                leaves.forEach(leaf => {
+                    leaf.classList.remove('rotate-leaves');
+                });
+                
+                // Switch click areas
+                rightClickArea.style.display = 'none';
+                leftClickArea.style.display = 'block';
+            }, 800);
+        });
+        
+        // Transition to Enhanced Fanta or back to Sprite
+        leftClickArea.addEventListener('click', function() {
+            if (!isFanta) return;
+            
+            if (!isEnhancedFanta) {
+                // Transition to Enhanced Fanta
+                isEnhancedFanta = true;
+                
+                // Add fade-out animation to current elements
+                canContainer.classList.add('fade-out');
+                brandText.classList.add('fade-out');
+                document.querySelectorAll('.orange').forEach(orange => {
+                    orange.classList.add('fade-out');
+                });
+                
+                // After fade out animation
+                setTimeout(() => {
+                    window.location.href = 'Fa.html';
+                }, 800);
+                return;
+            }
+            
+            // Transition back to regular Fanta
+            isEnhancedFanta = false;
+            
+            // Add fade-out animation
+            document.querySelector('.can').classList.add('fade-out');
+            document.querySelector('.brand-name').classList.add('fade-out');
+            document.querySelectorAll('.orange').forEach(orange => {
+                orange.classList.add('fade-out');
+            });
+            
+            // After fade out animation
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 800);
+            
+            // Transition back to Sprite
+            isFanta = false;
+            isEnhancedFanta = false;
+            
+            // Add rotate animation to leaves
+            leaves.forEach(leaf => {
+                leaf.classList.add('rotate-leaves');
+            });
+            
+            // Slide can container to the right
+            canContainer.classList.add('slide-right');
+            
+            // Fade out brand text
+            brandText.classList.add('fade-out');
+            
+            // Change background back to green
+            body.classList.remove('fanta-bg');
+            
+            // After animation completes
+            setTimeout(() => {
+                // Change brand text back to Sprite
+                brandText.textContent = 'SPRITE';
+                
+                // Change can back to Sprite and make it smaller
+                mainCan.src = 'https://i.postimg.cc/XY42pLnk/image-fx-4-removebg-preview.png';
+                mainCan.classList.remove('fanta-can');
+                
+                // Show lemons
+                lemons.forEach(lemon => {
+                    lemon.style.opacity = '1';
+                });
+                
+                // Reset animations
+                canContainer.classList.remove('slide-right');
+                brandText.classList.remove('fade-out');
+                
+                // Remove leaf rotation
+                leaves.forEach(leaf => {
+                    leaf.classList.remove('rotate-leaves');
+                });
+                
+                // Switch click areas
+                rightClickArea.style.display = 'block';
+                leftClickArea.style.display = 'none';
+            }, 800);
+        });
+    </script>
+<p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=Adefris/sprite" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p></body>
+</html>

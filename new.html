@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethiopia Reveal Effect</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+    
+    body {
+      margin: 0;
+      min-height: 200vh;
+      background: white;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .image-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('https://i.postimg.cc/1X7Bdm1Q/Untitled-design-7.png') no-repeat center center;
+      background-size: cover;
+      z-index: 1;
+    }
+
+    .mask-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      -webkit-mask: 
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 300"><text x="50%" y="50%" font-family="Playfair Display" font-weight="700" font-size="140" text-anchor="middle" dominant-baseline="middle" fill="black"><tspan dx="50">E</tspan><tspan dx="50">T</tspan><tspan dx="50">H</tspan><tspan dx="50">I</tspan><tspan dx="50">O</tspan><tspan dx="50">P</tspan><tspan dx="50">I</tspan><tspan dx="50">A</tspan></text></svg>') 
+        center/contain no-repeat,
+        linear-gradient(white, white);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      z-index: 2;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .content-reveal {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      box-sizing: border-box;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .flag-image {
+      width: 40%;
+      max-width: 500px;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .ethiopia-description {
+      width: 50%;
+      color: white;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 1s ease, transform 1s ease;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .visible {
+      opacity: 1 !important;
+      transform: translateX(0) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="image-container"></div>
+  <div class="mask-container" id="mask"></div>
+  
+  <div class="content-reveal">
+    <img src="https://i.postimg.cc/T2gyVrnd/Flag-map-of-Ethiopia-removebg-preview.png" class="flag-image" id="flag">
+    <div class="ethiopia-description" id="description">
+      Ethiopia, the cradle of humankind, is a land of ancient civilizations and stunning landscapes. 
+      Home to rock-hewn churches of Lalibela, the Simien Mountains, and the source of the Blue Nile, 
+      it's the only African country never colonized. With over 80 ethnic groups speaking various languages, 
+      Ethiopia boasts rich cultural traditions and is the origin of coffee.
+    </div>
+  </div>
+
+  <script>
+    const mask = document.getElementById('mask');
+    const flag = document.getElementById('flag');
+    const description = document.getElementById('description');
+    const minSize = 100;
+    const maxSize = 5000;
+    const fadeThreshold = 0.9;
+    const contentAppearThreshold = 0.85;
+
+    window.addEventListener('scroll', () => {
+      const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      const currentSize = minSize + (maxSize - minSize) * scrollProgress;
+      
+      mask.style.webkitMaskSize = `${currentSize}%`;
+      mask.style.maskSize = `${currentSize}%`;
+
+      // Handle mask fade out
+      if (scrollProgress >= fadeThreshold) {
+        const fadeProgress = (scrollProgress - fadeThreshold) / (1 - fadeThreshold);
+        mask.style.opacity = (1 - fadeProgress).toString();
+      } else {
+        mask.style.opacity = '1';
+      }
+
+      // Handle content appearance
+      if (scrollProgress >= contentAppearThreshold) {
+        const appearProgress = (scrollProgress - contentAppearThreshold) / (1 - contentAppearThreshold);
+        const contentOpacity = Math.min(appearProgress * 1.5, 1);
+        
+        flag.style.opacity = contentOpacity.toString();
+        description.style.opacity = contentOpacity.toString();
+        
+        if (appearProgress > 0.5) {
+          flag.classList.add('visible');
+          description.classList.add('visible');
+        }
+      } else {
+        flag.style.opacity = '0';
+        description.style.opacity = '0';
+        flag.classList.remove('visible');
+        description.classList.remove('visible');
+      }
+    });
+
+    // Initialize
+    mask.style.webkitMaskSize = `${minSize}%`;
+    mask.style.maskSize = `${minSize}%`;
+    mask.style.opacity = '1';
+    flag.style.opacity = '0';
+    description.style.opacity = '0';
+  </script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethiopian Platter</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Grass background styling */
+        .grass {
+            position: absolute;
+            z-index: 1; /* Changed from -1 to ensure visibility */
+            opacity: 0.7;
+            pointer-events: none;
+            width: 50px; /* 10% smaller than original */
+            height: 50px; /* 10% smaller than original */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .circular-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2; /* Added z-index to ensure it's above grass */
+        }
+
+        .wooden-circle {
+            position: relative;
+            border-radius: 50%;
+            overflow: visible;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            width: 73.92vw;
+            height: 73.92vw;
+            max-width: 616px;
+            max-height: 616px;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            top: -40%;
+        }
+
+        .wooden-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+            border-radius: 50%;
+        }
+
+        .inner-circle-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 67.76%;
+            height: 67.76%;
+            z-index: 15;
+        }
+
+        .inner-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 0, 0, 0.05),
+                0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .dish-wrapper {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(0deg);
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .static-text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 67.76%;
+            height: 67.76%;
+            z-index: 25;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        .static-text-container h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .static-text-container p {
+            font-size: 1rem;
+            margin: 0;
+            max-width: 80%;
+            transition: opacity 0.3s ease;
+        }
+
+        .tibs, .doro-wet, .shro {
+            position: absolute;
+            width: 190%;
+            height: 190%;
+            background-size: 95%;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 20;
+            filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        .tibs {
+            background-image: url('https://i.postimg.cc/K8mLMrdy/tibs-removebg-preview.png');
+            right: 19%;
+            bottom: 50%;
+            transform: translateY(50%) rotate(0deg);
+        }
+
+        .tibs:hover {
+            transform: translateY(50%) scale(1.05) rotate(0deg);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .doro-wet {
+            background-image: url('https://i.postimg.cc/1X4wf9TV/doro-wet-removebg-preview.png');
+            background-size: contain;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg);
+        }
+
+        .doro-wet:hover {
+            transform: translateX(-50%) scale(1.05) rotate(0deg);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .shro {
+            background-image: url('https://i.postimg.cc/7YtG58MS/shro-removebg-preview.png');
+            left: 25%;
+            bottom: 50%;
+            transform: translateY(50%) rotate(0deg);
+        }
+
+        .shro:hover {
+            transform: translateY(50%) scale(1.05) rotate(0deg);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .left-side-images {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 5;
+            padding-left: 20px;
+        }
+
+        .right-side-images {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            padding-right: 20px;
+        }
+
+        .side-image {
+            max-width: 300px;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 30;
+            gap: 20px;
+        }
+
+        .footer button {
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .reservation-button {
+            background-color: black;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-button, .contact-button {
+            background-color: transparent;
+            color: black;
+            position: relative;
+        }
+
+        .menu-button:hover, .contact-button:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .left-side-images, .right-side-images {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Left side decorative images -->
+    <div class="left-side-images">
+        <img src="https://i.postimg.cc/fyGxBh9P/Untitled-design-3-removebg-preview.png" alt="Left decorative image 1" class="side-image">
+        <img src="https://i.postimg.cc/NM070Dtd/Untitled-design-4-removebg-preview.png" alt="Left decorative image 2" class="side-image">
+    </div>
+
+    <!-- Right side decorative image -->
+    <div class="right-side-images">
+        <img src="https://i.postimg.cc/TPfJzG4M/Untitled-design-5-removebg-preview.png" alt="Right decorative image" class="side-image">
+    </div>
+
+    <!-- Main circular platter with dishes -->
+    <div class="circular-container">
+        <div class="wooden-circle">
+            <img src="https://i.postimg.cc/BvsMnqCY/Untitled-design.png" alt="Wooden Texture" class="wooden-image">
+            
+            <div class="inner-circle-container">
+                <div class="inner-circle"></div>
+
+                <!-- New dish wrapper for rotating dishes -->
+                <div class="dish-wrapper">
+                    <div class="shro"></div>
+                    <div class="tibs"></div>
+                    <div class="doro-wet"></div>
+                </div>
+            </div>
+
+            <!-- Static text container -->
+            <div class="static-text-container">
+                <h1 id="dish-title">Selam Hotel</h1>
+                <p id="dish-description">A welcoming space for delicious Ethiopian cuisine.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer buttons -->
+    <div class="footer">
+        <button class="menu-button">Menu</button>
+        <button class="reservation-button">Find a Reservation</button>
+        <button class="contact-button">Contact</button>
+    </div>
+
+    <script>
+        const woodenCircle = document.querySelector('.wooden-circle');
+        const innerCircle = document.querySelector('.inner-circle');
+        const dishWrapper = document.querySelector('.dish-wrapper');
+        const dishTitle = document.getElementById('dish-title');
+        const dishDescription = document.getElementById('dish-description');
+        
+        let rotationAngle = 0;
+        let floating = true;
+        let floatDirection = 1;
+        let floatAmount = 0;
+
+        // Dish info data
+        const dishData = [
+            {
+                name: "Doro Wot",
+                description: "Doro Wot is a spicy chicken stew garnished with hard-boiled eggs that have been steeped in the sauce."
+            },
+            {
+                name: "Tibs",
+                description: "\"Tibs\" in Ethiopian cuisine refers to a popular dish where meat (usually beef, mutton, or goat) is sautéed or stir-fried with various spices and sometimes vegetables."
+            },
+            {
+                name: "Shiro Wot",
+                description: "Shiro Wot, also known as Shiro Wat, is a popular Ethiopian and Eritrean stew made from ground chickpeas or broad bean meal."
+            },
+            {
+                name: "Selam Hotel",
+                description: "A welcoming space for delicious Ethiopian cuisine."
+            }
+        ];
+
+        function floatAnimation() {
+            if (floating) {
+                floatAmount += 0.015 * floatDirection;
+                if (Math.abs(floatAmount) > 0.8) {
+                    floatDirection *= -1;
+                }
+                woodenCircle.style.transform = `scale(1.03) translateY(${floatAmount}px) rotate(${floatAmount*0.5}deg)`;
+                requestAnimationFrame(floatAnimation);
+            }
+        }
+
+        function updateCenterText(angle) {
+            // Normalize the angle to be between 0 and 360
+            const normalizedAngle = ((angle % 360) + 360) % 360;
+            
+            // Determine which dish is at the bottom (south position)
+            // The bottom position is at 90 degrees (since 0 is at 3 o'clock position)
+            // We check which dish is closest to 90 degrees
+            let dishIndex = 3; // Default to Selam Hotel
+            
+            // Calculate positions for each dish
+            // Initial positions:
+            // Shro is at 0 degrees (right side)
+            // Tibs is at 120 degrees
+            // Doro Wet is at 240 degrees
+            // After rotation, we check which dish is closest to 90 degrees (bottom)
+            
+            const shroAngle = (270 - normalizedAngle + 360) % 360;
+            const tibsAngle = (30 - normalizedAngle + 360) % 360;
+            const doroAngle = (150 - normalizedAngle + 360) % 360;
+            
+            // Find which dish is closest to 90 degrees (bottom position)
+            const angles = [
+                {index: 0, angle: Math.abs(shroAngle - 90)},
+                {index: 1, angle: Math.abs(tibsAngle - 90)},
+                {index: 2, angle: Math.abs(doroAngle - 90)}
+            ];
+            
+            // Sort by closest to 90 degrees
+            angles.sort((a, b) => a.angle - b.angle);
+            
+            // If the closest dish is within 45 degrees of bottom position, show it
+            if (angles[0].angle <= 45) {
+                dishIndex = angles[0].index;
+            }
+            
+            // Fade out current text
+            dishTitle.style.opacity = '0';
+            dishDescription.style.opacity = '0';
+            
+            // After fade out completes, update text and fade in
+            setTimeout(() => {
+                dishTitle.textContent = dishData[dishIndex].name;
+                dishDescription.textContent = dishData[dishIndex].description;
+                
+                dishTitle.style.opacity = '1';
+                dishDescription.style.opacity = '1';
+            }, 300);
+        }
+
+        function rotateDishes() {
+            rotationAngle -= 90; // Rotate 90 degrees counterclockwise
+            dishWrapper.style.transform = `rotate(${rotationAngle}deg)`;
+            
+            // Update text based on which dish is at the bottom
+            updateCenterText(rotationAngle);
+            
+            // Visual feedback
+            innerCircle.style.backgroundColor = '#e0e0e0';
+            setTimeout(() => {
+                innerCircle.style.backgroundColor = 'white';
+            }, 300);
+        }
+
+        // Function to add grass images to the background
+        function addGrassImages() {
+            const grassUrls = [
+                'https://i.postimg.cc/43vD6759/grass2-removebg-preview.png',
+                'https://i.postimg.cc/KvnCS36s/grass1.png'
+            ];
+
+            const grassCount = 90; // Number of grass images to add
+
+            for (let i = 0; i < grassCount; i++) {
+                // Create an img element instead of a div
+                const grass = document.createElement('img');
+                grass.className = 'grass';
+                grass.src = grassUrls[i % grassUrls.length];
+                
+                // Random position within the body
+                const randomX = Math.random() * 90; // Avoid extreme edges
+                const randomY = Math.random() * 90;
+                
+                grass.style.left = `${randomX}%`;
+                grass.style.top = `${randomY}%`;
+                
+                // Random size variation for natural look
+                const sizeVariation = 0.5 + Math.random(); // Between 0.5 and 1.5
+                grass.style.width = `${50 * sizeVariation}px`;
+                grass.style.height = `${50 * sizeVariation}px`;
+                
+                // Random rotation for natural look
+                const rotation = Math.random() * 360;
+                grass.style.transform = `rotate(${rotation}deg)`;
+                
+                document.body.appendChild(grass);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            floatAnimation();
+            updateCenterText(rotationAngle); // Initialize text position
+            addGrassImages(); // Add grass images to the background
+
+            woodenCircle.addEventListener('mouseenter', () => {
+                floating = false;
+            });
+
+            woodenCircle.addEventListener('mouseleave', () => {
+                floating = true;
+                floatAnimation();
+            });
+
+            // Manual rotation on click
+            innerCircle.addEventListener('click', rotateDishes);
+        });
+    </script>
+</body>
+</html>
